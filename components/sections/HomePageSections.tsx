@@ -34,7 +34,7 @@ export default function HeroSection() {
                 Nous contacter <ArrowRight className="w-5 h-5" />
               </Link>
               <Link 
-                href="/services/transaction"
+                href="/services/trans-vendre"
                 className="bg-white text-gray-900 border border-stone-200 px-10 py-5 rounded-full font-semibold text-lg hover:bg-stone-50 transition-colors"
               >
                 Notre expertise
@@ -99,7 +99,7 @@ export default function HeroSection() {
 export function ServicesSection() {
   const categories = [
     {
-      id: 'location',
+      id: 'loc-saisonnier',
       category: 'Location' as ServiceCategory,
       icon: Key,
       title: 'Gestion &\nRevenus',
@@ -107,7 +107,7 @@ export function ServicesSection() {
       features: ['Bail Mobilité', 'Saisonnière', 'Garantie Impayés']
     },
     {
-      id: 'fiscalité',
+      id: 'fisc-lmnp',
       category: 'Fiscalité' as ServiceCategory,
       icon: Scale,
       title: 'Fiscalité &\nPatrimoine',
@@ -115,7 +115,7 @@ export function ServicesSection() {
       features: ['LMNP Réel', 'Holding / SCI', 'Succession']
     },
     {
-      id: 'transaction',
+      id: 'trans-vendre',
       category: 'Transaction' as ServiceCategory,
       icon: Briefcase,
       title: 'Vente &\nAcquisition',
@@ -123,7 +123,7 @@ export function ServicesSection() {
       features: ['Estimation Précise', 'Off-Market', 'Chasse Immo']
     },
     {
-      id: 'gestion',
+      id: 'gest-travaux',
       category: 'Gestion' as ServiceCategory,
       icon: Building2,
       title: 'Travaux &\nValorisation',

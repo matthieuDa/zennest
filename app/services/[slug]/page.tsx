@@ -6,7 +6,7 @@ import { getServiceBySlug, getCategoryForService, getAllServices } from '@/lib/d
 import ServicePageContent from '@/components/sections/ServicePageContent'
 
 type Props = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
@@ -23,7 +23,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const service = getServiceBySlug(params.slug)
+  const { slug } = await params
+  const service = getServiceBySlug(slug)
   
   if (!service) {
     return {
@@ -41,9 +42,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function ServicePage({ params }: Props) {
-  const service = getServiceBySlug(params.slug)
-  const category = getCategoryForService(params.slug)
+export default async function ServicePage({ params }: Props) {
+  const { slug } = await params
+  const service = getServiceBySlug(slug)
+  const category = getCategoryForService(slug)
   
   if (!service || !category) {
     notFound()

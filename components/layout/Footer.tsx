@@ -17,10 +17,10 @@ export default function Footer() {
           <div>
             <h4 className="font-bold mb-8 text-gray-900 tracking-tight">Services</h4>
             <ul className="space-y-4 text-gray-500 font-light text-sm">
-              <li><Link href="/services/location" className="hover:text-black transition-colors">Location & Gestion</Link></li>
-              <li><Link href="/services/transaction" className="hover:text-black transition-colors">Transaction & Vente</Link></li>
-              <li><Link href="/services/fiscalité" className="hover:text-black transition-colors">Fiscalité & Patrimoine</Link></li>
-              <li><Link href="/services/gestion" className="hover:text-black transition-colors">Travaux & Valorisation</Link></li>
+              <li><Link href="/services/loc-saisonnier" className="hover:text-black transition-colors">Location & Gestion</Link></li>
+              <li><Link href="/services/trans-vendre" className="hover:text-black transition-colors">Transaction & Vente</Link></li>
+              <li><Link href="/services/fisc-lmnp" className="hover:text-black transition-colors">Fiscalité & Patrimoine</Link></li>
+              <li><Link href="/services/gest-travaux" className="hover:text-black transition-colors">Travaux & Valorisation</Link></li>
             </ul>
           </div>
           <div>

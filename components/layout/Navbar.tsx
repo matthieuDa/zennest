@@ -38,23 +38,26 @@ export default function Navbar({ activePage = 'home' }: NavbarProps) {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-10 h-full">
-            {(Object.keys(SERVICES) as ServiceCategory[]).map((category) => (
-              <div key={category} className="relative h-full flex items-center">
-                <Link 
-                  href={`/services/${category.toLowerCase()}`}
-                  onMouseEnter={() => setHoveredNav(category)}
-                  className={`flex items-center gap-1.5 text-sm font-medium transition-all duration-300 py-4 relative group ${
-                    hoveredNav === category 
-                      ? 'text-black' 
-                      : 'text-gray-500 hover:text-black'
-                  }`}
-                >
-                  {category} 
-                  {/* Underline Animation */}
-                  <span className={`absolute bottom-3 left-0 w-full h-0.5 bg-black transform origin-left transition-transform duration-300 ${hoveredNav === category ? 'scale-x-100' : 'scale-x-0'}`}></span>
-                </Link>
-              </div>
-            ))}
+            {(Object.keys(SERVICES) as ServiceCategory[]).map((category) => {
+              const firstService = SERVICES[category][0]
+              return (
+                <div key={category} className="relative h-full flex items-center">
+                  <Link 
+                    href={`/services/${firstService.id}`}
+                    onMouseEnter={() => setHoveredNav(category)}
+                    className={`flex items-center gap-1.5 text-sm font-medium transition-all duration-300 py-4 relative group ${
+                      hoveredNav === category 
+                        ? 'text-black' 
+                        : 'text-gray-500 hover:text-black'
+                    }`}
+                  >
+                    {category} 
+                    {/* Underline Animation */}
+                    <span className={`absolute bottom-3 left-0 w-full h-0.5 bg-black transform origin-left transition-transform duration-300 ${hoveredNav === category ? 'scale-x-100' : 'scale-x-0'}`}></span>
+                  </Link>
+                </div>
+              )
+            })}
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
@@ -92,7 +95,7 @@ export default function Navbar({ activePage = 'home' }: NavbarProps) {
                     Accédez à l&apos;expertise dédiée. Stratégies, services et accompagnement sur-mesure pour ce pôle.
                   </p>
                   <Link 
-                    href={`/services/${hoveredNav.toLowerCase()}`}
+                    href={`/services/${SERVICES[hoveredNav][0].id}`}
                     className="text-xs font-bold uppercase tracking-wide text-black hover:underline underline-offset-4"
                   >
                     Voir la page complète →
@@ -127,7 +130,7 @@ export default function Navbar({ activePage = 'home' }: NavbarProps) {
               {(Object.keys(SERVICES) as ServiceCategory[]).map((category) => (
                 <div key={category} className="border-b border-stone-200 pb-6">
                   <Link 
-                    href={`/services/${category.toLowerCase()}`}
+                    href={`/services/${SERVICES[category][0].id}`}
                     className="text-2xl font-bold mb-4 block"
                     onClick={() => setMobileMenuOpen(false)}
                   >
