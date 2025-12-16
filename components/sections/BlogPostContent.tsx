@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { Clock, Calendar, MessageSquare } from 'lucide-react'
 import { BlogPost } from '@/types'
 import ReactMarkdown from 'react-markdown'
+import FAQAccordion from './FAQAccordion'
+import InternalLinksWidget from './InternalLinksWidget'
+import Breadcrumb from './Breadcrumb'
 
 interface BlogPostContentProps {
   post: BlogPost
@@ -20,6 +23,13 @@ const MarkdownComponents = {
   ol: ({ node, ...props }: any) => <ol className="list-decimal pl-5 space-y-2 mb-6 text-gray-700" {...props} />,
   li: ({ node, ...props }: any) => <li className="mb-2" {...props} />,
   strong: ({ node, ...props }: any) => <strong className="font-semibold text-black" {...props} />,
+  blockquote: ({ node, ...props }: any) => <blockquote className="border-l-4 border-black pl-6 py-2 my-6 bg-stone-50 italic text-gray-700" {...props} />,
+  table: ({ node, ...props }: any) => <div className="overflow-x-auto my-8"><table className="min-w-full border-collapse border border-stone-200" {...props} /></div>,
+  thead: ({ node, ...props }: any) => <thead className="bg-stone-100" {...props} />,
+  tbody: ({ node, ...props }: any) => <tbody {...props} />,
+  tr: ({ node, ...props }: any) => <tr className="border-b border-stone-200" {...props} />,
+  th: ({ node, ...props }: any) => <th className="px-4 py-3 text-left font-bold text-gray-900 border border-stone-200" {...props} />,
+  td: ({ node, ...props }: any) => <td className="px-4 py-3 text-gray-600 border border-stone-200" {...props} />,
   div: ({ node, ...props }: any) => <div {...props} />,
 }
 
@@ -37,6 +47,11 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
         {/* Main Content */}
         <div className="lg:col-span-8 lg:col-start-2">
           
+          {/* Breadcrumb */}
+          <div className="animate-fade-in mb-4">
+            <Breadcrumb category={post.category} title={post.title} />
+          </div>
+
           {/* Header */}
           <div className="mb-12 animate-fade-in-up">
             <div className="flex items-center gap-4 text-stone-500 text-sm mb-6 font-medium">
@@ -61,6 +76,16 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               {post.content || ''}
             </ReactMarkdown>
           </article>
+
+          {/* Internal Links Widget */}
+          {post.internalLinks && post.internalLinks.length > 0 && (
+            <InternalLinksWidget links={post.internalLinks} />
+          )}
+
+          {/* FAQ Section */}
+          {post.faqItems && post.faqItems.length > 0 && (
+            <FAQAccordion items={post.faqItems} />
+          )}
 
           {/* Bottom CTA (Mobile/Desktop) */}
           <div className="mt-20 p-8 bg-stone-50 rounded-3xl border border-stone-100 text-center md:text-left flex flex-col md:flex-row items-center gap-8 justify-between">

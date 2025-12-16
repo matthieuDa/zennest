@@ -11,6 +11,11 @@ export interface BlogPostMetadata {
   category: string;
   readTime: string;
   date: string;
+  metaDescription?: string;
+  ogImage?: string;
+  keywords?: string[];
+  faqItems?: Array<{ question: string; answer: string }>;
+  internalLinks?: Array<{ title: string; slug: string; context: 'related' | 'suggested' }>;
 }
 
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
@@ -57,6 +62,11 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
       readTime: metadata.readTime,
       date: metadata.date,
       content: content,
+      metaDescription: metadata.metaDescription,
+      ogImage: metadata.ogImage,
+      keywords: metadata.keywords,
+      faqItems: metadata.faqItems,
+      internalLinks: metadata.internalLinks,
     } as BlogPost;
   } catch (error) {
     return null;
