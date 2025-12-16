@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/data'
+import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog'
 import BlogPostContent from '@/components/sections/BlogPostContent'
 
 type Props = {
@@ -10,13 +10,13 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const posts = getAllBlogPosts()
+  const posts = await getAllBlogPosts()
   return posts.map(post => ({ slug: post.id }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = getBlogPostBySlug(slug)
+  const post = await getBlogPostBySlug(slug)
   
   if (!post) {
     return {
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const post = getBlogPostBySlug(slug)
+  const post = await getBlogPostBySlug(slug)
   
   if (!post) {
     notFound()

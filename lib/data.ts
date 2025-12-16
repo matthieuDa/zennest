@@ -1,5 +1,4 @@
 import { ServiceCategory, SubService, BlogPost } from '@/types';
-import { BLOG_CONTENT } from '@/blog-content';
 
 export const SERVICES: Record<ServiceCategory, SubService[]> = {
   Location: [
@@ -83,7 +82,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Location',
     readTime: '5 min',
     date: 'Jan 2025',
-    content: BLOG_CONTENT['encadrement-loyers-paris']
+    content: ''
   },
   {
     id: 'bail-mobilite-guide',
@@ -92,7 +91,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Location',
     readTime: '6 min',
     date: 'Fév 2025',
-    content: BLOG_CONTENT['bail-mobilite-guide']
+    content: ''
   },
   {
     id: 'location-saisonniere-reglementation',
@@ -101,7 +100,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Location',
     readTime: '4 min',
     date: 'Mars 2025',
-    content: BLOG_CONTENT['location-saisonniere-reglementation']
+    content: ''
   },
   {
     id: 'bail-societe-faille',
@@ -110,7 +109,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Location',
     readTime: '5 min',
     date: 'Avril 2025',
-    content: BLOG_CONTENT['bail-societe-faille']
+    content: ''
   },
   {
     id: 'gli-vs-garant',
@@ -119,7 +118,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: 'Location',
     readTime: '4 min',
     date: 'Mai 2025',
-    content: BLOG_CONTENT['gli-vs-garant']
+    content: ''
   }
 ];
 

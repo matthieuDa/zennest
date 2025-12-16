@@ -4,9 +4,23 @@ import React from 'react'
 import Link from 'next/link'
 import { Clock, Calendar, MessageSquare } from 'lucide-react'
 import { BlogPost } from '@/types'
+import ReactMarkdown from 'react-markdown'
 
 interface BlogPostContentProps {
   post: BlogPost
+}
+
+// Custom components for markdown rendering
+const MarkdownComponents = {
+  h2: ({ node, ...props }: any) => <h2 className="text-3xl font-bold mb-6 mt-8 text-gray-900" {...props} />,
+  h3: ({ node, ...props }: any) => <h3 className="text-2xl font-bold mb-4 mt-6 text-gray-900" {...props} />,
+  h4: ({ node, ...props }: any) => <h4 className="text-lg font-bold mb-3 text-gray-900" {...props} />,
+  p: ({ node, ...props }: any) => <p className="text-gray-600 font-light leading-loose mb-6" {...props} />,
+  ul: ({ node, ...props }: any) => <ul className="list-disc pl-5 space-y-2 mb-6 text-gray-700" {...props} />,
+  ol: ({ node, ...props }: any) => <ol className="list-decimal pl-5 space-y-2 mb-6 text-gray-700" {...props} />,
+  li: ({ node, ...props }: any) => <li className="mb-2" {...props} />,
+  strong: ({ node, ...props }: any) => <strong className="font-semibold text-black" {...props} />,
+  div: ({ node, ...props }: any) => <div {...props} />,
 }
 
 export default function BlogPostContent({ post }: BlogPostContentProps) {
@@ -42,10 +56,11 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
           <div className="w-full h-px bg-stone-100 mb-12"></div>
 
           {/* Content Body */}
-          <article 
-            className="prose prose-lg md:prose-xl prose-stone prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:font-light prose-p:leading-loose prose-strong:text-black prose-strong:font-semibold max-w-none animate-fade-in-up delay-100"
-            dangerouslySetInnerHTML={{ __html: post.content || '' }}
-          />
+          <article className="max-w-none animate-fade-in-up delay-100">
+            <ReactMarkdown components={MarkdownComponents}>
+              {post.content || ''}
+            </ReactMarkdown>
+          </article>
 
           {/* Bottom CTA (Mobile/Desktop) */}
           <div className="mt-20 p-8 bg-stone-50 rounded-3xl border border-stone-100 text-center md:text-left flex flex-col md:flex-row items-center gap-8 justify-between">
