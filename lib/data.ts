@@ -1,5 +1,5 @@
-import { ServiceCategory, SubService, BlogPost } from './types';
-import { BLOG_CONTENT } from './blog-content';
+import { ServiceCategory, SubService, BlogPost } from '@/types';
+import { BLOG_CONTENT } from '@/blog-content';
 
 export const SERVICES: Record<ServiceCategory, SubService[]> = {
   Location: [
@@ -122,3 +122,41 @@ export const BLOG_POSTS: BlogPost[] = [
     content: BLOG_CONTENT['gli-vs-garant']
   }
 ];
+
+// Data access functions
+export function getAllServices(): Record<ServiceCategory, SubService[]> {
+  return SERVICES;
+}
+
+export function getServicesByCategory(category: ServiceCategory): SubService[] {
+  return SERVICES[category] || [];
+}
+
+export function getServiceBySlug(slug: string): SubService | null {
+  for (const category of Object.keys(SERVICES) as ServiceCategory[]) {
+    const service = SERVICES[category].find(s => s.id === slug);
+    if (service) return service;
+  }
+  return null;
+}
+
+export function getCategoryForService(slug: string): ServiceCategory | null {
+  for (const category of Object.keys(SERVICES) as ServiceCategory[]) {
+    if (SERVICES[category].find(s => s.id === slug)) {
+      return category;
+    }
+  }
+  return null;
+}
+
+export function getAllBlogPosts(): BlogPost[] {
+  return BLOG_POSTS;
+}
+
+export function getBlogPostBySlug(slug: string): BlogPost | null {
+  return BLOG_POSTS.find(post => post.id === slug) || null;
+}
+
+export function getBlogPostsByCategory(category: ServiceCategory): BlogPost[] {
+  return BLOG_POSTS.filter(post => post.category === category);
+}
