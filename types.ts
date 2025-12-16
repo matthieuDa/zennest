@@ -1,5 +1,7 @@
 export type ServiceCategory = 'Location' | 'Transaction' | 'Fiscalité' | 'Gestion';
 
+export type BlogCategory = ServiceCategory | 'Stratégie' | 'Patrimoine' | 'Transmission';
+
 export interface SubService {
   id: string;
   label: string;
@@ -23,7 +25,7 @@ export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
-  category: ServiceCategory | 'Stratégie' | 'Patrimoine' | 'Transmission';
+  category: BlogCategory;
   readTime: string;
   date: string;
   content?: string;

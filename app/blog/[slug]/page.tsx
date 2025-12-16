@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer'
 import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog'
 import BlogPostContent from '@/components/sections/BlogPostContent'
 import { generateArticleSchema, generateFAQSchema, generateBreadcrumbSchema } from '@/lib/jsonld'
+import { SITE_URL } from '@/lib/config'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${post.title} - ZenNest`,
       description: metaDescription,
       type: 'article',
-      url: `https://zennest.fr/blog/${slug}`,
+      url: `${SITE_URL}/blog/${slug}`,
       images: [
         {
           url: ogImage,
@@ -55,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [ogImage],
     },
     alternates: {
-      canonical: `https://zennest.fr/blog/${slug}`,
+      canonical: `${SITE_URL}/blog/${slug}`,
     },
   }
 }

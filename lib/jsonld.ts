@@ -1,4 +1,5 @@
 import { BlogPost } from '@/types';
+import { SITE_URL, SITE_NAME, SITE_LOGO_URL } from './config';
 
 export function generateArticleSchema(post: BlogPost, slug: string) {
   return {
@@ -6,25 +7,25 @@ export function generateArticleSchema(post: BlogPost, slug: string) {
     '@type': 'Article',
     headline: post.title,
     description: post.metaDescription || post.excerpt,
-    image: post.ogImage ? `https://zennest.fr${post.ogImage}` : undefined,
+    image: post.ogImage ? `${SITE_URL}${post.ogImage}` : undefined,
     datePublished: new Date(post.date).toISOString(),
     dateModified: new Date(post.date).toISOString(),
     author: {
       '@type': 'Organization',
-      name: 'ZenNest',
-      url: 'https://zennest.fr',
+      name: SITE_NAME,
+      url: SITE_URL,
     },
     publisher: {
       '@type': 'Organization',
-      name: 'ZenNest',
+      name: SITE_NAME,
       logo: {
         '@type': 'ImageObject',
-        url: 'https://zennest.fr/logo.png',
+        url: SITE_LOGO_URL,
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://zennest.fr/blog/${slug}`,
+      '@id': `${SITE_URL}/blog/${slug}`,
     },
     keywords: post.keywords?.join(', '),
   };
@@ -56,19 +57,19 @@ export function generateBreadcrumbSchema(post: BlogPost, slug: string) {
         '@type': 'ListItem',
         position: 1,
         name: 'Accueil',
-        item: 'https://zennest.fr',
+        item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Blog',
-        item: 'https://zennest.fr/blog',
+        item: `${SITE_URL}/blog`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: post.title,
-        item: `https://zennest.fr/blog/${slug}`,
+        item: `${SITE_URL}/blog/${slug}`,
       },
     ],
   };
