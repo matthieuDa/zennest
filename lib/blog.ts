@@ -77,3 +77,59 @@ export async function getBlogPostsByCategory(category: string): Promise<BlogPost
   const posts = await getAllBlogPosts();
   return posts.filter(post => post.category === category);
 }
+
+/**
+ * Get related posts based on category and keywords similarity
+ * @param currentPost The current post to find related posts for
+ * @param limit Maximum number of related posts to return
+ * @returns Array of related posts sorted by relevance
+ */
+export async function getRelatedPosts(currentPost: BlogPost, limit: number = 3): Promise<BlogPost[]> {
+  const allPosts = await getAllBlogPosts();
+  
+  // Filter out current post
+  const otherPosts = allPosts.filter(post => post.id !== currentPost.id);
+  
+  // Calculate relevance score for each post
+  const scoredPosts = otherPosts.map(post => {
+    let score = 0;
+    
+    // Same category gets highest priority (50 points)
+    if (post.category === currentPost.category) {
+      score += 50;
+    }
+    
+    // Check keyword overlap (5 points per matching keyword)
+    if (currentPost.keywords && post.keywords) {
+      const currentKeywords = new Set(currentPost.keywords.map(k => k.toLowerCase()));
+      const matchingKeywords = post.keywords.filter(k => 
+        currentKeywords.has(k.toLowerCase())
+      );
+      score += matchingKeywords.length * 5;
+    }
+    
+    // Check if current post links to this post (30 points)
+    if (currentPost.internalLinks) {
+      const linkedSlugs = currentPost.internalLinks.map(link => link.slug);
+      if (linkedSlugs.includes(post.id)) {
+        score += 30;
+      }
+    }
+    
+    // Check if the other post links back to current post (20 points)
+    if (post.internalLinks) {
+      const linkedSlugs = post.internalLinks.map(link => link.slug);
+      if (linkedSlugs.includes(currentPost.id)) {
+        score += 20;
+      }
+    }
+    
+    return { post, score };
+  });
+  
+  // Sort by score (descending) and return top N
+  return scoredPosts
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(item => item.post);
+}

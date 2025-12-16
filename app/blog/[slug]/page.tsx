@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/blog'
+import { getBlogPostBySlug, getAllBlogPosts, getRelatedPosts } from '@/lib/blog'
 import BlogPostContent from '@/components/sections/BlogPostContent'
 import { generateArticleSchema, generateFAQSchema, generateBreadcrumbSchema } from '@/lib/jsonld'
 import { SITE_URL } from '@/lib/config'
@@ -69,6 +69,8 @@ export default async function BlogPostPage({ params }: Props) {
     notFound()
   }
 
+  const relatedPosts = await getRelatedPosts(post, 3)
+
   const articleSchema = generateArticleSchema(post, slug);
   const faqSchema = generateFAQSchema(post.faqItems);
   const breadcrumbSchema = generateBreadcrumbSchema(post, slug);
@@ -96,7 +98,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       <Navbar />
       <main className="flex-grow">
-        <BlogPostContent post={post} />
+        <BlogPostContent post={post} relatedPosts={relatedPosts} />
       </main>
       <Footer />
     </>
