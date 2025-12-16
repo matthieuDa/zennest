@@ -5,27 +5,59 @@ import Link from 'next/link'
 import { Clock, Calendar, MessageSquare } from 'lucide-react'
 import { BlogPost } from '@/types'
 import ReactMarkdown from 'react-markdown'
+import FAQAccordion from './FAQAccordion'
+import InternalLinksWidget from './InternalLinksWidget'
+import Breadcrumb from './Breadcrumb'
+import TableOfContents from './TableOfContents'
+import ScrollDepthTracker from '../analytics/ScrollDepthTracker'
+import RelatedPosts from './RelatedPosts'
 
 interface BlogPostContentProps {
   post: BlogPost
+  relatedPosts?: BlogPost[]
 }
 
-// Custom components for markdown rendering
+// Helper function to create slug from heading text
+const createSlug = (text: string) => {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+}
+
+// Custom components for markdown rendering with IDs for headings
 const MarkdownComponents = {
-  h2: ({ node, ...props }: any) => <h2 className="text-3xl font-bold mb-6 mt-8 text-gray-900" {...props} />,
-  h3: ({ node, ...props }: any) => <h3 className="text-2xl font-bold mb-4 mt-6 text-gray-900" {...props} />,
+  h2: ({ node, children, ...props }: any) => {
+    const text = typeof children === 'string' ? children : children?.[0] || ''
+    const id = createSlug(text)
+    return <h2 id={id} className="text-3xl font-bold mb-6 mt-8 text-gray-900" {...props}>{children}</h2>
+  },
+  h3: ({ node, children, ...props }: any) => {
+    const text = typeof children === 'string' ? children : children?.[0] || ''
+    const id = createSlug(text)
+    return <h3 id={id} className="text-2xl font-bold mb-4 mt-6 text-gray-900" {...props}>{children}</h3>
+  },
   h4: ({ node, ...props }: any) => <h4 className="text-lg font-bold mb-3 text-gray-900" {...props} />,
   p: ({ node, ...props }: any) => <p className="text-gray-600 font-light leading-loose mb-6" {...props} />,
   ul: ({ node, ...props }: any) => <ul className="list-disc pl-5 space-y-2 mb-6 text-gray-700" {...props} />,
   ol: ({ node, ...props }: any) => <ol className="list-decimal pl-5 space-y-2 mb-6 text-gray-700" {...props} />,
   li: ({ node, ...props }: any) => <li className="mb-2" {...props} />,
   strong: ({ node, ...props }: any) => <strong className="font-semibold text-black" {...props} />,
+  blockquote: ({ node, ...props }: any) => <blockquote className="border-l-4 border-black pl-6 py-2 my-6 bg-stone-50 italic text-gray-700" {...props} />,
+  table: ({ node, ...props }: any) => <div className="overflow-x-auto my-8"><table className="min-w-full border-collapse border border-stone-200" {...props} /></div>,
+  thead: ({ node, ...props }: any) => <thead className="bg-stone-100" {...props} />,
+  tbody: ({ node, ...props }: any) => <tbody {...props} />,
+  tr: ({ node, ...props }: any) => <tr className="border-b border-stone-200" {...props} />,
+  th: ({ node, ...props }: any) => <th className="px-4 py-3 text-left font-bold text-gray-900 border border-stone-200" {...props} />,
+  td: ({ node, ...props }: any) => <td className="px-4 py-3 text-gray-600 border border-stone-200" {...props} />,
   div: ({ node, ...props }: any) => <div {...props} />,
 }
 
-export default function BlogPostContent({ post }: BlogPostContentProps) {
+export default function BlogPostContent({ post, relatedPosts }: BlogPostContentProps) {
   return (
     <div className="min-h-screen bg-white pt-32 pb-24 animate-fade-in">
+      {/* Scroll Depth Tracker */}
+      <ScrollDepthTracker articleTitle={post.title} />
       
       {/* Progress bar placeholder (visual only) */}
       <div className="fixed top-0 left-0 h-1 bg-stone-100 w-full z-40">
@@ -37,6 +69,11 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
         {/* Main Content */}
         <div className="lg:col-span-8 lg:col-start-2">
           
+          {/* Breadcrumb */}
+          <div className="animate-fade-in mb-4">
+            <Breadcrumb category={post.category} title={post.title} />
+          </div>
+
           {/* Header */}
           <div className="mb-12 animate-fade-in-up">
             <div className="flex items-center gap-4 text-stone-500 text-sm mb-6 font-medium">
@@ -62,6 +99,21 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
             </ReactMarkdown>
           </article>
 
+          {/* Internal Links Widget */}
+          {post.internalLinks && post.internalLinks.length > 0 && (
+            <InternalLinksWidget links={post.internalLinks} />
+          )}
+
+          {/* FAQ Section */}
+          {post.faqItems && post.faqItems.length > 0 && (
+            <FAQAccordion items={post.faqItems} />
+          )}
+
+          {/* Related Posts */}
+          {relatedPosts && relatedPosts.length > 0 && (
+            <RelatedPosts posts={relatedPosts} />
+          )}
+
           {/* Bottom CTA (Mobile/Desktop) */}
           <div className="mt-20 p-8 bg-stone-50 rounded-3xl border border-stone-100 text-center md:text-left flex flex-col md:flex-row items-center gap-8 justify-between">
             <div>
@@ -79,8 +131,12 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
 
         {/* Sticky Sidebar (Desktop Only) */}
         <div className="hidden lg:block lg:col-span-3 relative">
-          <div className="sticky top-32 space-y-6 animate-fade-in delay-500">
-            <div className="bg-stone-900 text-white p-6 rounded-2xl shadow-xl">
+          <div className="space-y-6 animate-fade-in delay-500">
+            {/* Table of Contents */}
+            {post.content && <TableOfContents content={post.content} />}
+            
+            <div className="sticky top-32 space-y-6">
+              <div className="bg-stone-900 text-white p-6 rounded-2xl shadow-xl">
               <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-4">
                 <MessageSquare className="w-6 h-6" />
               </div>
@@ -105,6 +161,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                   </svg>
                 </button>
               </div>
+            </div>
             </div>
           </div>
         </div>
