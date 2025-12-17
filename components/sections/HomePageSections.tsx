@@ -65,13 +65,13 @@ export default function HeroSection() {
 
           {/* Right: Abstract Visual */}
           <div className="hidden lg:block lg:col-span-4 relative h-full min-h-[500px] animate-fade-in delay-500">
-            <div className="absolute top-10 right-0 w-80 h-96 bg-stone-200 rounded-[3rem] -rotate-6 z-10 overflow-hidden hover:rotate-0 transition-all duration-700 ease-out">
+            <div className="absolute top-10 right-0 w-80 h-96 bg-stone-900 rounded-[3rem] -rotate-6 z-10 overflow-hidden hover:rotate-0 hover:scale-105 transition-all duration-700 ease-out group">
               <Image 
                 src="https://picsum.photos/600/800?grayscale" 
                 alt="Interior" 
                 width={600}
                 height={800}
-                className="w-full h-full object-cover opacity-80 mix-blend-multiply hover:scale-110 transition-transform duration-700" 
+                className="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-700" 
               />
             </div>
             <div className="absolute top-20 right-20 w-80 h-96 bg-stone-900 rounded-[3rem] -z-10"></div>

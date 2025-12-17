@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { BlogPost } from '@/types'
-import { ArrowRight, Clock } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 interface RelatedPostsProps {
   posts: BlogPost[]
@@ -11,32 +11,40 @@ export default function RelatedPosts({ posts }: RelatedPostsProps) {
   if (!posts || posts.length === 0) return null
 
   return (
-    <div className="my-16 bg-stone-50 rounded-3xl p-8 md:p-12">
-      <h2 className="text-3xl font-bold mb-8 text-gray-900">Articles Connexes</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {posts.map(post => (
+    <div className="my-16">
+      <h2 className="text-3xl font-bold mb-12 text-gray-900">Articles connexes</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
+        {posts.map((post, idx) => (
           <Link
             key={post.id}
             href={`/blog/${post.id}`}
-            className="group bg-white rounded-2xl p-6 border border-stone-200 hover:border-black transition-colors"
+            className="group text-left flex flex-col h-full animate-fade-in-up"
+            style={{ animationDelay: `${idx * 100}ms`, animationFillMode: 'both' }}
           >
-            <div className="mb-3">
-              <span className="inline-block px-3 py-1 bg-stone-100 text-stone-600 text-xs font-medium rounded-full uppercase tracking-wider">
-                {post.category}
-              </span>
-            </div>
-            <h3 className="font-bold text-gray-900 mb-2 group-hover:text-black line-clamp-2">
-              {post.title}
-            </h3>
-            <p className="text-sm text-stone-600 mb-4 line-clamp-2">
-              {post.excerpt}
-            </p>
-            <div className="flex items-center justify-between text-xs text-stone-500">
-              <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
+            {/* Top Border with Meta */}
+            <div className="border-t border-stone-200 pt-6 mb-4 flex justify-between items-center w-full">
+              <span className="text-xs font-bold uppercase tracking-widest text-stone-400">
                 {post.readTime}
               </span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <span className="text-xs font-bold text-stone-300 group-hover:text-black transition-colors">
+                Lire l'article
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:underline decoration-1 underline-offset-4 decoration-stone-300 transition-all leading-tight">
+              {post.title}
+            </h3>
+
+            {/* Excerpt */}
+            <p className="text-stone-500 text-sm font-light leading-relaxed line-clamp-3 mb-6 flex-grow">
+              {post.excerpt}
+            </p>
+
+            {/* CTA Button */}
+            <div className="flex items-center gap-2 text-sm font-bold text-black bg-stone-50 self-start px-4 py-2 rounded-full group-hover:bg-black group-hover:text-white transition-colors">
+              Lire
+              <ArrowRight className="w-3 h-3" />
             </div>
           </Link>
         ))}

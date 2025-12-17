@@ -5,24 +5,19 @@ import Link from 'next/link'
 import { Clock, Calendar, MessageSquare } from 'lucide-react'
 import { BlogPost } from '@/types'
 import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
 import FAQAccordion from './FAQAccordion'
 import InternalLinksWidget from './InternalLinksWidget'
 import Breadcrumb from './Breadcrumb'
 import TableOfContents from './TableOfContents'
 import ScrollDepthTracker from '../analytics/ScrollDepthTracker'
 import RelatedPosts from './RelatedPosts'
+import { createSlug } from '@/lib/text-utils'
 
 interface BlogPostContentProps {
   post: BlogPost
   relatedPosts?: BlogPost[]
-}
-
-// Helper function to create slug from heading text
-const createSlug = (text: string) => {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
 }
 
 // Custom components for markdown rendering with IDs for headings
@@ -94,7 +89,11 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
 
           {/* Content Body */}
           <article className="max-w-none animate-fade-in-up delay-100">
-            <ReactMarkdown components={MarkdownComponents}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              components={MarkdownComponents}
+            >
               {post.content || ''}
             </ReactMarkdown>
           </article>
@@ -130,13 +129,17 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
         </div>
 
         {/* Sticky Sidebar (Desktop Only) */}
-        <div className="hidden lg:block lg:col-span-3 relative">
-          <div className="space-y-6 animate-fade-in delay-500">
-            {/* Table of Contents */}
-            {post.content && <TableOfContents content={post.content} />}
-            
-            <div className="sticky top-32 space-y-6">
-              <div className="bg-stone-900 text-white p-6 rounded-2xl shadow-xl">
+        <div className="hidden lg:block lg:col-span-3">
+          {/* Table of Contents with parallax effect - scrolls naturally */}
+          {post.content && (
+            <div className="mb-6">
+              <TableOfContents content={post.content} />
+            </div>
+          )}
+          
+          {/* Sticky CTA Cards - stays fixed */}
+          <div className="sticky top-32 space-y-6 animate-fade-in delay-500">
+            <div className="bg-stone-900 text-white p-6 rounded-2xl shadow-xl">
               <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-4">
                 <MessageSquare className="w-6 h-6" />
               </div>
@@ -161,7 +164,6 @@ export default function BlogPostContent({ post, relatedPosts }: BlogPostContentP
                   </svg>
                 </button>
               </div>
-            </div>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { List } from 'lucide-react'
+import { createSlug } from '@/lib/text-utils'
 
 interface TocItem {
   id: string
@@ -16,6 +17,7 @@ interface TableOfContentsProps {
 export default function TableOfContents({ content }: TableOfContentsProps) {
   const [toc, setToc] = useState<TocItem[]>([])
   const [activeId, setActiveId] = useState<string>('')
+  const [scrollY, setScrollY] = useState(0)
 
   useEffect(() => {
     // Extract h2 and h3 headings from markdown content
@@ -26,16 +28,20 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     while ((match = headingRegex.exec(content)) !== null) {
       const level = match[1].length
       const text = match[2].trim()
-      // Create a slug from the heading text
-      const id = text
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/\s+/g, '-')
+      // Create a slug from the heading text using the centralized function
+      const id = createSlug(text)
       
       items.push({ id, text, level })
     }
 
     setToc(items)
+
+    // Parallax effect: track scroll with latency
+    const handleScroll = () => {
+      setScrollY(window.scrollY * 0.85) // 85% scroll speed = parallax effect
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     // Set up intersection observer for active heading
     const observer = new IntersectionObserver(
@@ -58,13 +64,17 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     return () => {
       clearTimeout(timeoutId)
       observer.disconnect()
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [content])
 
   if (toc.length === 0) return null
 
   return (
-    <div className="hidden lg:block sticky top-32">
+    <div 
+      className="hidden lg:block sticky top-32"
+      style={{ transform: `translateY(-${scrollY * 0.15}px)` }}
+    >
       <div className="bg-stone-50 rounded-2xl p-6 max-w-xs">
         <div className="flex items-center gap-2 mb-4">
           <List className="w-5 h-5 text-gray-900" />

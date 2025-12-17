@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { BlogPost } from '@/types';
+import { normalizeHeadingToFrench, normalizeMarkdownHeadings } from './text-utils';
 
 const BLOG_POSTS_DIR = path.join(process.cwd(), 'blog-posts');
 
@@ -30,12 +31,12 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
 
     return {
       id: slug,
-      title: metadata.title,
+      title: normalizeHeadingToFrench(metadata.title),
       excerpt: metadata.excerpt,
       category: metadata.category,
       readTime: metadata.readTime,
       date: metadata.date,
-      content: content,
+      content: normalizeMarkdownHeadings(content),
     } as BlogPost;
   });
 
@@ -56,12 +57,12 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 
     return {
       id: slug,
-      title: metadata.title,
+      title: normalizeHeadingToFrench(metadata.title),
       excerpt: metadata.excerpt,
       category: metadata.category,
       readTime: metadata.readTime,
       date: metadata.date,
-      content: content,
+      content: normalizeMarkdownHeadings(content),
       metaDescription: metadata.metaDescription,
       ogImage: metadata.ogImage,
       keywords: metadata.keywords,

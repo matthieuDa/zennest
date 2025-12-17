@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { ServiceCategory, SubService } from '@/types'
 import { getAllBlogPosts } from '@/lib/data'
+import ContactForm from './ContactForm'
 
 interface ServicePageContentProps {
   service: SubService
@@ -112,6 +113,9 @@ export default function ServicePageContent({ service, category }: ServicePageCon
           </div>
         </div>
       </section>
+
+      {/* Contact Form */}
+      <ContactForm />
     </div>
   )
 }

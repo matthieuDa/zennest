@@ -19,7 +19,7 @@ export default function InternalLinksWidget({ links }: InternalLinksWidgetProps)
     <div className="my-16">
       {relatedLinks.length > 0 && (
         <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4 text-gray-900">Articles Connexes</h3>
+          <h3 className="text-xl font-bold mb-4 text-gray-900">Articles connexes</h3>
           <div className="space-y-3">
             {relatedLinks.map((link, index) => (
               <Link 
